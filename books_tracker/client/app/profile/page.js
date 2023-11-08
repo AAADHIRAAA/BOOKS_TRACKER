@@ -75,9 +75,10 @@ const Profile = () => {
             padding: '20px', // Set the padding inside the container
             borderRadius: '8px', // Add border-radius for rounded corners
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
-            backgroundColor: '#cfe2f3',
+            backgroundColor: '#1e90ff',
+            color:'white',
             }}>
-            <h3>Books Scanned</h3>
+            <h3 style={{color:'white',fontWeight:'bolder',marginBottom:'30px',marginTop:'10px'}}>Books Scanned</h3>
             <p><strong>Total Count:</strong> {booksScanned}</p>
             <p><strong>Today Count:</strong> {booksScannedtoday}</p>
           </div>
@@ -90,9 +91,10 @@ const Profile = () => {
               padding: '20px', // Set the padding inside the container
               borderRadius: '8px', // Add border-radius for rounded corners
               boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Add box shadow
-              backgroundColor: '#cfe2f3',
+              backgroundColor: '#1e90ff',
+              color:'white',
           }}>
-            <h3>Pages Scanned</h3>
+            <h3 style={{color:'white',fontWeight:'bolder',marginBottom:'30px',marginTop:'10px'}}>Pages Scanned</h3>
             <p><strong>Total Count:</strong> {pagesScanned}</p>
             <p><strong>Today Count:</strong> {pagesScannedtoday}</p>
           </div>

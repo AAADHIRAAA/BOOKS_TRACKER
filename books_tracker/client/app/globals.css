@@ -16,6 +16,19 @@
   }
 }
 
+.DashboardContainer p {
+	animation: countUp 3s ease-in-out infinite;
+  }
+  
+  @keyframes countUp {
+	from {
+	  transform: translateY(-10px);
+	}
+	to {
+	  transform: translateY(0);
+	}
+  }
+
 body {
   background: #ffffff; /* Set light gray background color */
   margin: 0; /* Remove default margin */
@@ -44,6 +57,7 @@ html {
 
 h2 {
 	margin-block-start: 1rem;
+
 }
 
 
@@ -69,7 +83,7 @@ header {
   
 	padding: 1rem min(5%, 1rem);
   color: #ffffff;
-  background-color: rgb(56, 56, 246);
+  background-color: rgb(52, 74, 237);
   
 	& a {
 		text-decoration: none;
@@ -95,7 +109,7 @@ main {
 
 .start-btn,
 button {
-	background: hsl(225deg 70% 50% / 1);
+	background: hsl(225, 87%, 56%);
 	border: none;
 	border-radius: 0.125rem;
 	color: hsl(240, 27%, 92%);
@@ -128,7 +142,7 @@ button {
 }
 
 .card {
-	background: rgba(114, 155, 221, 0.841);
+	background: rgba(65, 130, 236, 0.841);
 	box-shadow: 0 0.125rem 0.25rem hsl(225deg 20% 30% / 0.125);
 	display: flex;
 	flex-direction: column;

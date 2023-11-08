@@ -1,10 +1,9 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
-import Footer from "../components/footer";
 import Header from "../components/header";
 import DashboardContainer from '../components/dashboardContainer'; 
-import styles from '../styles/loginpage.css';
+
 const Dashboard = () => {
 
   const loggedInUsers = 10; // Fetch this data from your backend or state
@@ -12,6 +11,9 @@ const Dashboard = () => {
   const pagesScanned = 500; // Fetch this data from your backend or state
   const authorCount = 30; // Fetch this data from your backend or state
   const publisherCount = 20;
+
+
+  
   return (
     <>
     <Header/>
@@ -27,7 +29,7 @@ const Dashboard = () => {
     </div>
     <div style={{ position: 'fixed', bottom: '100px', left: '120px' }}>
     <Link href="/spreadsheet">
-          <button className={styles.buttonn}>Go to Spreadsheet</button>
+          <button>Go to Spreadsheet</button>
         </Link>
   </div>
     </>

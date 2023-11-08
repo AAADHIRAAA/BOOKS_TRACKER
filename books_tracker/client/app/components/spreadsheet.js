@@ -106,6 +106,7 @@ const Spreadsheet = () => {
     .then((response) => response.json())
       .then((data) => {
         console.log('Data sent to the backend:', data);
+        alert('Data is submitted');
         if (data) {      
           // Store the ID of the saved data in state
           setEditedDataId(rowData.id);
@@ -143,6 +144,7 @@ const Spreadsheet = () => {
         .then((response) => response.json())
         .then((data) => {
           console.log('Data updated successfully:', data);
+          alert('Data is updated');
           // Update the rowData state with the updated data
           const updatedRowData = [...rowData];
           updatedRowData[editingRowIndex] = data.data; // Assuming the updated data is returned in the 'data' property
@@ -174,14 +176,14 @@ const Spreadsheet = () => {
   
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+      {/* <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
         <input
         type="text"
         placeholder="Search..."
         value={searchQuery}
         onChange={handleSearchInputChange}
       />
-      </div>
+      </div> */}
       {isMounted && (
       <table style={{ width: '100%' }}>
         <thead>
