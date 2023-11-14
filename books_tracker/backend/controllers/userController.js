@@ -6,9 +6,9 @@ const AppError = require('../utils/AppError');
 
 // Function to fetch user details by ID
 const getUserDetails = async (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: 'Unauthorized' });
-}
+//   if (!req.isAuthenticated()) {
+//     return res.status(401).json({ error: 'Unauthorized' });
+// }
   const userId = req.user.googleId; // Assuming you're using Passport and the user is authenticated
 
   try {
