@@ -141,24 +141,40 @@ app.get("/auth/google", passport.authenticate("google", ["profile","email"]));
 
 // );
 
+// app.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google"),(req,res)=>{
+//     console.log(req.user);
+   
+//     res.redirect("/dashboard");
+//     // res.send(req.user);
+//   }),
+
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google"),(req,res)=>{
+  passport.authenticate("google"),
+  (req, res, next) => {
+    req.session.user = req.user;
+    
+    next();
+  },
+  (req, res) => {
     console.log(req.user);
-    res.redirect("/dashboard");
-    // res.send(req.user);
-  }),
 
+    res.redirect("/dashboard");
+    
+  }
+);
 
 app.get('/failed',  (req, res) => {
   res.redirect("http://localhost:3000/login");
  
 });
 
-app.use((req, res, next) => {
-  console.log('Authentication status:', req.isAuthenticated());
-  next();
-});
+// app.use((req, res, next) => {
+//   console.log('Authentication status:', req.isAuthenticated());
+//   next();
+// });
 
 // Protect a route that requires authentication
 app.get('/dashboard',  (req, res) => {
@@ -181,16 +197,14 @@ app.get("/logout",(req,res)=>{
     
 });
 
-// function isLoggedIn(req, res, next){
-//   req.user ? next() : res.sendStatus(401);
-// }
+
 
 const limit = rateLimit({
   max: 200,
   windowMs: 60 * 60 * 60,
   message: 'Too many request with this IP Address..Try again in 1 hour'
 });
-const api = require('./api');
+// const api = require('./api');
 
 // app.use('/dwt', limit);
 // app.use('/api/v1',api);
