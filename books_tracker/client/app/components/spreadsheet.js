@@ -1,6 +1,5 @@
 "use client"
-import React, { useEffect, useState , useMemo } from 'react';
-import {useGlobalFilter} from 'react-table';
+import React, { useEffect, useState  } from 'react';
 const generateUniqueId = () => {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
@@ -14,7 +13,7 @@ const Spreadsheet = () => {
   }, []);
 
   const initialRowData = {
-    id: generateUniqueId(),
+    _id: generateUniqueId(),
     col1: '',
     col2: '',
     col3: '',
@@ -22,59 +21,65 @@ const Spreadsheet = () => {
     col5: '',
     col6: '',
     col7: '',
+    isEditable:true,
+    isSubmitted:false,
   };
-  const [filters, setFilters] = useState({
-    col1: '',
-    col2: '',
-    col3: '',
-    col4: '',
-    col5: '',
-    col6: '',
-    col7: '',
-  });
+  // const [filters, setFilters] = useState({
+  //   col1: '',
+  //   col2: '',
+  //   col3: '',
+  //   col4: '',
+  //   col5: '',
+  //   col6: '',
+  //   col7: '',
+  // });
 
   const [editedDataId, setEditedDataId] = useState(null);
   const [rowData, setRowData] = useState([initialRowData]);
+  const [newRow,setNewRow] =useState([initialRowData])
   const [editingRowIndex, setEditingRowIndex] = useState(null);
   const [submittedRows, setSubmittedRows] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleFilterChange = (e, columnName) => {
-    const updatedFilters = { ...filters, [columnName]: e.target.value };
-    setFilters(updatedFilters);
-  };
+  // const [searchQuery, setSearchQuery] = useState('');
 
-  const filteredData = rowData.filter((row) => {
-    return Object.keys(filters).every((key) => {
-      if (filters[key]) {
-        return row[key].toLowerCase().includes(filters[key].toLowerCase());
-      }
-      return true;
-    });
-  });
+  // const handleFilterChange = (e, columnName) => {
+  //   const updatedFilters = { ...filters, [columnName]: e.target.value };
+  //   setFilters(updatedFilters);
+  // };
+
+  // const filteredData = rowData.filter((row) => {
+  //   return Object.keys(filters).every((key) => {
+  //     if (filters[key]) {
+  //       return row[key].toLowerCase().includes(filters[key].toLowerCase());
+  //     }
+  //     return true;
+  //   });
+  // });
  
   
 
-  const handleSearchInputChange = (e) => {
-    setSearchQuery(e.target.value);
-  };
+  // const handleSearchInputChange = (e) => {
+  //   setSearchQuery(e.target.value);
+  // };
 
 
   const handleEditClick = (rowIndex) => {
     setEditingRowIndex(rowIndex);
-    setEditedDataId(rowData.id);
+    // setEditedDataId(rowData.id);
 
     console.log(rowIndex);
-    console.log(rowData);
+    // console.log(rowData);
   };
   
   
   const handleSubmit = () => {
     // Send rowData to the backend using an API call
-    const newData = rowData.filter((row) => !submittedRows.includes(row.id));
+    const newData =  rowData[rowData.length - 1];
+    console.log(rowData.length);
+    // const newData = rowData.filter((row) => !submittedRows.includes(row.id));
     // Mapping object to map frontend property names to backend property names
     const propertyMapping = {
-      id:'id',
+      _id:'_id',
       col1: 'title',
       col2: 'pages_scanned',
       col3: 'ID_url',
@@ -83,20 +88,20 @@ const Spreadsheet = () => {
       col6: 'year',
       col7: 'total_pages',
     };
-
-    const transformedData = newData.map((item) => {
+     
     // Transform property names using the mapping object
-      const transformedItem = {};
-      for (const frontendProperty in item) {
+      const transformedData = {};
+      for (const frontendProperty in newData) {
         const backendProperty = propertyMapping[frontendProperty];
         if (backendProperty) {
-          transformedItem[backendProperty] = item[frontendProperty];
+          transformedData[backendProperty] = newData[frontendProperty];
         }
       }
-      return transformedItem;
-    });
-
-    fetch('http://localhost:5000/api/save-book-data', {
+ 
+    console.log(newData);
+    console.log(transformedData);
+    
+    fetch('http://localhost:5000/api/v1/books/save-book-data', {
       method: 'POST',
       body: JSON.stringify(transformedData),
       headers: {
@@ -108,12 +113,17 @@ const Spreadsheet = () => {
         console.log('Data sent to the backend:', data);
         alert('Data is submitted');
         if (data) {      
+         newData.isEditable=false;
+         newData.isSubmitted=true;
           // Store the ID of the saved data in state
-          setEditedDataId(rowData.id);
-          setSubmittedRows([...submittedRows, rowData.id]);
+          setEditedDataId(newData.id);
+          setSubmittedRows([...submittedRows, newData.id]);
           // Optionally, reset the form or show a success message to the user
           // Create a new empty row in the frontend table
-          // setRowData([...rowData, { col1: '', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '' }]);
+          setNewRow([{ _id: generateUniqueId(), col1: '', col2: '', col3: '', col4: '', col5: '', col6: '', col7: '',isEditable: true, isSubmitted: false  }]);
+          // setRowData([...rowData, { ...initialRowData }]);
+          setRowData([...rowData, newRow]);
+         
         }
         else{
           console.error('Error: Sending data to backend');
@@ -132,14 +142,37 @@ const Spreadsheet = () => {
     if (editingRowIndex!==null) {
       const editedData = rowData[editingRowIndex];
       // Add the 'id' property to the edited data object
-      console.log(editedData)
+      console.log(editedData);
+    
+      const propertyMapping = {
+        _id:'_id',
+        col1: 'title',
+        col2: 'pages_scanned',
+        col3: 'ID_url',
+        col4: 'author_name',
+        col5: 'publisher_name',
+        col6: 'year',
+        col7: 'total_pages',
+      };
+   
+      // Transform property names using the mapping object
+        const transformedData = {};
+        for (const frontendProperty in editedData) {
+          const backendProperty = propertyMapping[frontendProperty];
+          if (backendProperty) {
+            transformedData[backendProperty] = editedData[frontendProperty];
+          }
+        }
+       
+   
+      console.log(transformedData);
       // Perform API call to update the data in the backend
-      fetch(`http://localhost:5000/api/update-book-data/${editingRowIndex}`, {
+      fetch(`http://localhost:5000/api/v1/books/update-book-data/${editedData._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editedData),
+        body: JSON.stringify(transformedData),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -152,6 +185,7 @@ const Spreadsheet = () => {
           // After successful response, reset editingRowIndex
           setEditingRowIndex(null);
           setEditedDataId(null);
+         
         })
         .catch((error) => {
           console.error('Error updating data:', error);
@@ -162,104 +196,117 @@ const Spreadsheet = () => {
     }
   };
 
+  const handleNewRowChange = (e, colName) => {
+    setNewRow((prevRow) => ({
+      ...prevRow,
+      [colName]: e.target.value,
+    }));
+  };
   const handleInputChange = (e, rowIndex, colName) => {
+
     if (rowIndex >= 0 && rowIndex < rowData.length) {
-      if (editingRowIndex === rowIndex || rowIndex === 0) {
+      // const currentRow = rowData[rowIndex];
+      console.log(rowData[rowIndex].isEditable);
+      console.log(rowIndex);
+      if ((editingRowIndex === rowIndex || rowIndex === 0)) {
         const updatedRowData = [...rowData];
         const updatedRow = { ...updatedRowData[rowIndex] };
         updatedRow[colName] = e.target.value;
         updatedRowData[rowIndex] = updatedRow;
         setRowData(updatedRowData);
+
       }
     }
   };
   
   return (
     <div>
-      {/* <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-        <input
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+        {/* <input
         type="text"
         placeholder="Search..."
         value={searchQuery}
         onChange={handleSearchInputChange}
-      />
-      </div> */}
+      /> */}
+      </div>
       {isMounted && (
       <table style={{ width: '100%' }}>
         <thead>
           <tr>
-            <th>Book Name<tr>
+            <th>Book Name
+            {/* <tr>
             <input
                 type="text"
                 placeholder="Filter..."
                 value={filters.col1}
                 onChange={(e) => handleFilterChange(e, 'col1')}
               />
-              </tr></th>
+              </tr> */}
+              </th>
             <th>No of Pages Scanned
-            <tr>
+            {/* <tr>
             <input
                 type="number"
                 placeholder="Filter..."
                 value={filters.col2}
                 onChange={(e) => handleFilterChange(e, 'col2')}
               />
-              </tr>
+              </tr> */}
             </th>
             <th >Identification Number
-            <tr>
+            {/* <tr>
             <input
                 type="text"
                 placeholder="Filter..."
                 value={filters.col3}
                 onChange={(e) => handleFilterChange(e, 'col3')}
               />
-              </tr>
+              </tr> */}
             </th>
             <th >Author Name
-            <tr>
+            {/* <tr>
             <input
                 type="text"
                 placeholder="Filter..."
                 value={filters.col4}
                 onChange={(e) => handleFilterChange(e, 'col4')}
               />
-              </tr>
+              </tr> */}
             </th>
             <th >Publisher Name
-            <tr>
+            {/* <tr>
             <input
                 type="text"
                 placeholder="Filter..."
                 value={filters.col5}
                 onChange={(e) => handleFilterChange(e, 'col5')}
               />
-              </tr>
+              </tr> */}
             </th>
             <th >Year of Publication
-            <tr>
+            {/* <tr>
             <input
                 type="number"
                 placeholder="Filter..."
                 value={filters.col6}
                 onChange={(e) => handleFilterChange(e, 'col6')}
               />
-              </tr>
+              </tr> */}
             </th>
             <th >Total No of Pages
-            <tr>
+            {/* <tr>
             <input
                 type="number"
                 placeholder="Filter..."
                 value={filters.col7}
                 onChange={(e) => handleFilterChange(e, 'col7')}
               />
-              </tr>
+              </tr> */}
             </th>
           </tr>
         </thead>
         <tbody>
-        {filteredData.map((row, rowIndex) => (
+        {rowData.map((row, rowIndex) => (
             <tr key={rowIndex}>
               <td>
                 <input
@@ -267,8 +314,8 @@ const Spreadsheet = () => {
                   id={`col1-${rowIndex}`}
                   name={`col1-${rowIndex}`}
                   value={rowData.col1}
-                  onChange={(e) => handleInputChange(e, rowIndex, 'col1')}
-                  disabled={editingRowIndex !== null && editingRowIndex !== rowIndex}
+                  onChange={(e) => handleInputChange(e, rowIndex, `col1`)}
+                  disabled={ editingRowIndex !== null && editingRowIndex !== rowIndex}
                 />
               </td>
               <td>
@@ -276,7 +323,7 @@ const Spreadsheet = () => {
                   type="number"
                   id={`col2-${rowIndex}`}
                   name={`col2-${rowIndex}`}
-                  value={rowData.col2}
+                  value={rowData.col1}
                   onChange={(e) => handleInputChange(e, rowIndex, 'col2')}
                   disabled={editingRowIndex !== null && editingRowIndex !== rowIndex}
                 />
@@ -344,7 +391,7 @@ const Spreadsheet = () => {
       </table>
       )}
       <button style={{ marginTop: '10px', padding: '10px 20px', cursor: 'pointer' }} onClick={handleSubmit}>Submit</button>
-      <button style={{ margin: '0 10px' }} onClick={() => setRowData([...rowData, { ...initialRowData }])}>Add Row</button>
+      {/* <button style={{ margin: '0 10px' }} onClick={() => setRowData([...rowData, { ...initialRowData }])}>Add Row</button> */}
      
     </div>
   );

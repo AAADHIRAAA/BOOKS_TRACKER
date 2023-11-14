@@ -1,7 +1,9 @@
+"use client"
 import React from "react";
 import Link from "next/link";
 
 const Header = () => {
+
   return (
     <header>
         <nav className="ml-auto">
@@ -12,9 +14,9 @@ const Header = () => {
           <Link href="/profile" className="mr-8">
               Profile
             </Link>
-            <Link href="/login" className="mr-8">
-              Log In
-            </Link>
+            <Link href="http://localhost:5000/logout" className="mr-8">
+            Logout
+          </Link>
           </>
         </nav>
     </header>

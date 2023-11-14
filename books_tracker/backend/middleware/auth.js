@@ -1,7 +1,1 @@
-module.exports.isUserAuthenticated = (req, res, next) => {
-    if (req.user) {
-      next();
-    } else {
-      res.status(401).send("You must login first!");
-    }
-  };
+// Middleware to check if the user is authenticated

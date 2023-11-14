@@ -3,6 +3,12 @@ import React from 'react';
 import Spreadsheet from '../components/spreadsheet';
 
 export default function Home() {
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth', // Optional: Adds smooth scrolling behavior
+    });
+  };
   return (
     <div>
     
@@ -12,6 +18,11 @@ export default function Home() {
       
           <Spreadsheet />
       
+        </div>
+        <div>
+        <button onClick={scrollToBottom} style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+      Scroll to Bottom
+        </button>
         </div>
       </main>
 

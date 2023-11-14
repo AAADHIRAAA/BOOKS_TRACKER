@@ -1,27 +1,37 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from "../components/header";
 
 
 const Profile = () => {
-  const booksScanned = 50;
-  const booksScannedtoday = 20;
-   const pagesScanned = 500; 
-  const pagesScannedtoday = 230;
+  const [booksScanned, setBooksScanned] = useState(0);
+  const [booksScannedtoday, setBooksScannedToday] = useState(0);
+  const [pagesScanned, setPagesScanned] = useState(0);
+  const [pagesScannedtoday, setPagesScannedToday] = useState(0);
 
-  const [isEditMode, setIsEditMode] = useState(false);
+  
   const [name, setName] = useState('Padma Priya');
   const [email, setEmail] = useState('priya@example.com');
 
-  const handleEditClick = () => {
-    setIsEditMode(true);
-  };
+  useEffect(() => {
+    // Fetch data from your backend endpoint
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/v1/users/overall-user-statistics');
+        const data = await response.json();
+        setBooksScanned(data.booksScanned);
+        setPagesScanned(data.pagesScanned);
+        const res = await fetch('http://localhost:5000/api/v1/users/user-today-statistics')
+        const dataa = await res.json();
+        setBooksScannedToday(dataa.booksScannedToday);
+        setPagesScannedToday(dataa.pagesScannedToday);
+      } catch (error) {
+        console.error('Error fetching statistics:', error);
+      }
+    };
 
-  const handleSaveClick = () => {
-    setIsEditMode(false);
-    // Save the edited data to your backend or state here
-  };
- 
+    fetchData();
+  }, []); 
   return (
     <>
       <Header/>
@@ -37,34 +47,18 @@ const Profile = () => {
             backgroundColor:'#cfe2f3', 
              zIndex: 0,
             }}>
-              
-        <form>   
+        
         <div style={{ marginTop:'10px', marginBottom:'80px',zIndex: 1 }}>
         <img src="/profile-logo.png" alt="Profile Logo" width="200px" height="250px" />
         </div>
           <div  style={{ marginBottom: '20px' }}>
-            <label  style={{ marginRight: '10px' }}>Name: </label>
-            {isEditMode ? (
-              <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            ) : (
-              <span>{name}</span>
-            )}
+            <label  style={{ marginRight: '10px', color:'blue' , fontWeight:'bolder', fontSize:'25px',fontFamily:'serif'}}>{name} </label>
           </div>
           
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ marginRight: '10px' }}>Email: </label>
-            {isEditMode ? (
-              <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-            ) : (
-              <span>{email}</span>
-            )}
+            <label style={{ marginRight: '10px' ,color:'blue', fontWeight:'bolder', fontSize:'25px', fontFamily:'serif'}}>{email}</label>
           </div>
-          {isEditMode ? (
-            <button  onClick={handleSaveClick}>Save</button>
-          ) : (
-            <button  onClick={handleEditClick}>Edit</button>
-          )}
-        </form>
+       
        </div>
         <div style={{ marginLeft: '400px',display:'flex',direction:'row' }}>
           <div style={{    

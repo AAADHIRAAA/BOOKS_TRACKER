@@ -1,10 +1,15 @@
-// const express = require('express');
-// const router = express.Router();
-// const bookController = require('../controllers/bookController');
+const express = require('express');
+const router = express.Router();
+const bookController = require('../controllers/bookController');
+
+router.post('/save-book-data', bookController.addBook);
 
 
-// router.post('/api/save-book-data',bookController.addBook);
-  
-// router.put('/api/update-book-data/:id',bookController.updateBook);
+router.put('/update-book-data/:id',bookController.updateBook);
+// Route to get the count of logged-in users
 
-//   module.exports = router;
+
+router.get('/overall-statistics', bookController.getOverallStatistics);
+router.get('/statistics-for-date', bookController.getStatisticsForDate);
+
+module.exports = router;

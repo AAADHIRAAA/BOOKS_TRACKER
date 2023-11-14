@@ -2,7 +2,7 @@
 "use client"
 import React, { useState, useEffect } from "react";
 
-const DashboardContainer = ({ title, count }) => {
+const DashboardContainer = ({ title, count,tcount }) => {
 
   const [currentCount, setCurrentCount] = useState(0);
 
@@ -33,8 +33,13 @@ const DashboardContainer = ({ title, count }) => {
       backgroundColor: '#1e90ff', // Set background color
       color:'#ffffff'
     }}>
-      <h3 style={{ fontWeight:'bolder',textAlign:'center',color:'white',marginBottom:'30px',marginTop:'10px'}}>{title}</h3>
-      <p style={{textAlign:"center"}}>{currentCount}</p>
+      <h3 style={{ fontWeight:'bolder',textAlign:'center',color:'white',marginBottom:'30px',marginTop:'10px',fontSize:'27px'}}>{title}</h3>
+      <p style={{textAlign:"center",fontSize:'20px'}}>Total:{currentCount}</p>
+      {/* {tcount !== undefined && (
+          <p style={{ textAlign: "center", fontSize: "15px" }}>
+            Today: {currentCount}
+          </p>
+        )} */}
   </div>
     </>
   );

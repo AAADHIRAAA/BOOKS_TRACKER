@@ -3,7 +3,14 @@ import React from "react";
 import Dashboard from "../dashboard/page";
 
 const DashboardPage = () => {
-  return <Dashboard  />;
+  return (
+    <div>
+      <Header />
+      <Dashboard  />
+    </div>
+  );
 };
+ 
+
 
 export default DashboardPage;

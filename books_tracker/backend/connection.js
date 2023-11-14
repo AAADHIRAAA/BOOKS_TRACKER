@@ -1,9 +1,11 @@
 
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config({ path: './.env.example' });
 
 const connectDB = async () => {
   try {
-    const atlasConnectionString = 'mongodb+srv://padmapriyas:Padma2023atlas@library-cluster.rhvnbwa.mongodb.net/dwt';
+    const atlasConnectionString = process.env.ATLAS_STRING;
     await mongoose.connect(atlasConnectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
